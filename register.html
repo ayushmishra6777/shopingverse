@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ShopVerse - Customer Registration</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            margin: 0;
+            padding: 40px 0;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            width: 400px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            color: #d97706;
+            margin: 0;
+            text-align: center;
+        }
+
+        h3 {
+            color: #334155;
+            margin-top: 5px;
+            text-align: center;
+        }
+
+        hr {
+            border: 1px solid #e2e8f0;
+            margin: 20px 0;
+        }
+
+        label {
+            font-weight: bold;
+            color: #1e293b;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 95%;
+            padding: 9px;
+            margin-top: 5px;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #d97706;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #b45309;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 20px;
+        }
+
+        a {
+            color: #d97706;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>ShopVerse</h2>
+        <h3>Create Shopping Account</h3>
+        <hr>
+
+        <form id="regForm" onsubmit="return validateForm(event)">
+            <label>Full Name :</label><br>
+            <input type="text" id="name" placeholder="Enter full name"><br><br>
+
+            <label>Phone Number :</label><br>
+            <input type="number" id="phone" placeholder="Enter mobile number"><br><br>
+
+            <label>Preferred Shopping Category :</label><br>
+            <select id="categoryPref">
+                <option value="">-- Select Category --</option>
+                <option value="Electronics">Electronics & Gadgets</option>
+                <option value="Fashion">Men & Women Fashion</option>
+                <option value="Home">Home & Lifestyle</option>
+            </select><br><br>
+
+            <label>Delivery City :</label><br>
+            <input type="text" id="city" placeholder="e.g. Bengaluru"><br><br>
+
+            <label>Email Address :</label><br>
+            <input type="email" id="email" placeholder="Enter email"><br><br>
+
+            <label>Create Password :</label><br>
+            <input type="password" id="password" placeholder="Create password"><br><br>
+
+            <button type="submit">Register Now</button>
+        </form>
+
+        <hr>
+        <footer>
+            <p>Already have an account? <a href="login.html">Login here</a></p>
+            <p>&copy; 2026 ShopVerse Online Store</p>
+        </footer>
+    </div>
+
+    <script>
+        async function validateForm(event) {
+            if (event) event.preventDefault();
+
+            const formData = {
+                name: document.getElementById("name").value.trim(),
+                phone: document.getElementById("phone").value.trim(),
+                categoryPref: document.getElementById("categoryPref").value,
+                city: document.getElementById("city").value.trim(),
+                email: document.getElementById("email").value.trim(),
+                password: document.getElementById("password").value
+            };
+
+            if (!formData.name || !formData.phone || !formData.categoryPref || !formData.city || !formData.email || !formData.password) {
+                alert("All fields must be filled out!");
+                return false;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+                alert(result.message);
+
+                if (result.success) {
+                    window.location.href = "login.html";
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Could not connect to the server. Make sure server.js is running!");
+            }
+
+            return false;
+        }
+    </script>
+</body>
+</html>
